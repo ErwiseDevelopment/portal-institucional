@@ -1,0 +1,12 @@
+$layout-name: 'l-header';
+
+.#{$layout-name} {
+    .nav-item {
+        margin: 0 !important;
+        padding: 1rem;
+
+        &.active {
+            background-color: $color-folk-dark-red;
+        }
+    }
+}

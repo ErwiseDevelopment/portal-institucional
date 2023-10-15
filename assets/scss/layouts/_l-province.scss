@@ -1,0 +1,33 @@
+$layout-name: 'l-province';
+
+.#{$layout-name} {
+    &__card-img {
+        border: 8px solid $color-folk-dark-blue;
+    }
+
+    &__office,
+    &__name {
+        font-size: 1.125rem;
+    }
+
+    &__department {
+        &__title {
+            top: 0;
+            right: calc(100% - -10px);
+            position: absolute;
+            font-size: 2rem;
+
+            @media screen and (max-width: 767px) {
+                position: unset;
+            }
+        }
+
+        &__item {
+            font-size: 1.125rem;
+
+            * {
+                color: $color-folk-white;
+            }
+        }
+    }
+}

@@ -1,0 +1,52 @@
+$layout-name: 'l-who-we-are';
+
+.#{$layout-name} {
+    &__summary {
+        position: relative;
+        background-color: $color-folk-dark-blue;
+        cursor: pointer;
+
+        &::before {
+            content: '';
+            width: 0;
+            height: 100%;
+            top: 0;
+            left: 0;
+            transition: all .2s;
+            position: absolute;
+            background-color: $color-folk-dark-red;
+        }
+
+        &:hover {
+            &::before {
+                width: 100%;
+            }
+        }
+
+        &.active {
+            background-color: $color-folk-dark-red;
+        }
+
+        &__item {
+            position: relative;
+            font-size: 1rem;
+            z-index: 1;
+
+            @media screen and (min-width: 1600px) {
+                font-size: 1.25rem;
+            }
+
+            @media screen and (max-width: 991px) {
+                font-size: .75rem;
+            }
+        }
+    }
+
+    &__contents {
+        display: none;
+
+        &.active {
+            display: block !important;
+        }
+    }
+}
