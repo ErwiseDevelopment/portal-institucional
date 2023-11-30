@@ -275,7 +275,7 @@ function mantenedora_create_post_type() {
            'public' 		=> true,
            'has_archive'	=> true,
            'menu_icon'		=> 'dashicons-location',
-           'supports' 		=> array( 'title', 'revisions', 'author' ) 
+           'supports' 		=> array( 'title', 'revisions', 'author', 'thumbnail' ) 
        ) );
   
    
