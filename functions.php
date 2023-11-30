@@ -264,3 +264,21 @@ function logoadmin() {
         $wp_admin_bar->remove_menu('comments');
     }
     add_action( 'wp_before_admin_bar_render', 'mytheme_admin_bar_render' );
+
+    
+//Função para criar post type:
+function mantenedora_create_post_type() { 
+   
+    
+       register_post_type( 'presenca-salesiana', array(
+           'labels' 		=> array( 'name' => 'Presença Salesiana', 'singular_name' => 'Presença Salesiana', 'all_items' => 'Todas Presenças' ),
+           'public' 		=> true,
+           'has_archive'	=> true,
+           'menu_icon'		=> 'dashicons-location',
+           'supports' 		=> array( 'title', 'revisions', 'author' ) 
+       ) );
+  
+   
+   }
+   add_action( 'init', 'mantenedora_create_post_type' );
+   
