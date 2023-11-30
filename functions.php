@@ -266,7 +266,7 @@ function logoadmin() {
     add_action( 'wp_before_admin_bar_render', 'mytheme_admin_bar_render' );
 
     
-//Função para criar post type:
+//Função para criar post type: //
 function mantenedora_create_post_type() { 
    
     
