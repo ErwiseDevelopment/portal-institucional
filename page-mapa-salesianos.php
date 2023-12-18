@@ -30,7 +30,8 @@ get_header(); ?>
         scale: 1.8;
     }
 
-    .box-map svg path:hover {
+    .box-map svg path:hover,
+    .box-map svg path.is-active {
         fill: #0B4DAD !important;
         cursor: pointer;
     }
@@ -46,25 +47,67 @@ get_header(); ?>
 
                 <div class="l-presence__box rounded u-bg-folk-primary py-5 px-3">
 
-                    <form action="">
+                    <form 
+                    id="formState"
+                    method="GET">
 
                         <div class="row">
 
                             <div class="col-12 mb-4">
 
-                                <select class="form-control">
-                                    <option value="">Escolha um estado</option>
-                                    <option value="">Selecione A</option>
-                                    <option value="">Selecione B</option>
+                                <?php
+                                    $categories_states = get_terms(array(
+                                        'taxonomy'   => 'estado',
+                                        'hide_empty' => false,
+                                        'parent'     => 0
+                                    ));
+                                ?>
+
+                                <select 
+                                class="form-control"
+                                id="state"
+                                name="estado">
+                                    <option value="0">Escolha um estado</option>
+                                    <?php foreach($categories_states as $state): ?>
+                                        <option value="<?php echo $state->slug; ?>"><?php echo $state->name; ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
 
                             <div class="col-12">
 
-                                <select class="form-control">
-                                    <option value="">Unidade de Ensino</option>
-                                    <option value="">Selecione A</option>
-                                    <option value="">Selecione B</option>
+                                <select 
+                                class="form-control"
+                                id="editorial"
+                                name="editoria">
+                                    <option value="0">Escolha uma editoria</option>
+                                    <?php
+                                        $editorials = [
+                                            1 => 'Educação Infantil',
+                                            2 => 'Ensino Fundamental e Médio',
+                                            3 => 'Ex-Alunos',
+                                            4 => 'Salesianos Cooperadores',
+                                            5 => 'Polo EaD Faculdade Dom Bosco',
+                                            6 => 'ADMA',
+                                            7 => 'Apirantado',
+                                            8 => 'Capelanias',
+                                            9 => 'Obra Social',
+                                            10 => 'Oratório',
+                                            11 => 'Paróquia',
+                                            12 => 'Igreja Semipública',
+                                            13 => 'Centro Juvenil',
+                                            14 => 'Assessoria às Obras',
+                                            15 => 'Comissão Inspetorial de Pastoral (CIP)',
+                                            16 => 'Coordenação Geral',
+                                            17 => 'Cursos Técnicos',
+                                            18 => 'Faculdade Dom Bosco',
+                                            19 => 'Gráfica',
+                                            20 => 'Casa de Repouso'
+                                        ];
+                                    ?>
+                                    <?php foreach($editorials as $key => $value): ?>
+                                        <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                    <?php endforeach; ?>
                                 </select>
                             </div>
                         </div>
@@ -75,16 +118,65 @@ get_header(); ?>
 
                         <!-- loop -->
                         <?php
-                            $args = array(
-                                'posts_per_page' => -1,
-                                'post_type'      => 'presenca-salesiana',
-                                'order'          => 'DESC'
-                            );
+                            $category_state = null;
+                            $relation = 'OR';
+
+                            if(isset($_GET['estado']) && $_GET['estado'] != '0') {
+                                $category_state = $_GET['estado'];
+                            }
+
+                            if(isset($_GET['editoria']) && $_GET['editoria'] != '0') {
+                                $category_editorial = $editorials[$_GET['editoria']];
+                            }
+
+                            if(isset($_GET['estado']) && isset($_GET['editoria']) && $_GET['estado'] != "0" && $_GET['editoria']) {
+                                $args = array(
+                                    'posts_per_page' => -1,
+                                    'post_type'     => 'presenca-salesiana',
+                                    'order'         => 'DESC',
+                                    'meta_query'    => array(
+                                                            array(
+                                                                'key'   => 'atividades',
+                                                                'value' => $category_editorial,
+                                                                'compare' => 'LIKE'
+                                                            )
+                                                        ),
+                                    'tax_query'     => array(
+                                                        array(
+                                                            'taxonomy' => 'estado',
+                                                            'field'    => 'slug',
+                                                            'terms'    => array($category_state)
+                                                        )
+                                ));
+                            } elseif(isset($_GET['estado']) && $_GET['estado'] != "0") {
+                                $args = array(
+                                    'posts_per_page' => -1,
+                                    'post_type'     => 'presenca-salesiana',
+                                    'order'         => 'DESC',
+                                    'tax_query'     => array(
+                                                        'relation' => $relation,
+                                                        array(
+                                                            'taxonomy' => 'estado',
+                                                            'field'    => 'slug',
+                                                            'terms'    => array($category_state)
+                                                        )
+                                ));
+                            }  else {
+                                $args = array(
+                                    'posts_per_page' => -1,
+                                    'post_type'      => 'presenca-salesiana',
+                                    'order'          => 'DESC'
+                                );
+                            }
 
                             $items = new WP_Query($args);
 
                             if($items->have_posts()) :
                                 while($items->have_posts()): $items->the_post();
+                                    // if($category_editorial):
+                                    //     foreach(get_field('atividades') as $activity) {
+                                            
+                                    //     }
                         ?>
                                     <div class="col-12 mb-3 px-0">
 
@@ -136,6 +228,8 @@ get_header(); ?>
                                     </div>
                         <?php
                                 endwhile;
+                            else:
+                                echo '<p class="font-weight-bold text-white">Nenhuma unidade encontrada!</p>';
                             endif;
 
                             wp_reset_query();
@@ -410,9 +504,105 @@ get_header(); ?>
     });
 </script>
 
+<script>
+    let currentUrl = window.location.href;
+	let urlState = /estado=([^&]+)/.exec(currentUrl) != null ? /estado=([^&]+)/.exec(currentUrl)[1] : null;
+    let urlEditorial = /editoria=([^&]+)/.exec(currentUrl) != null ? /editoria=([^&]+)/.exec(currentUrl)[1] : null;
+    const formState = document.getElementById('formState');
+    const mapStates = document.querySelectorAll('.js-map-brazil path');
+    const selectStates = document.getElementById('state');
+    const selectEditorial = document.getElementById('editorial');
+    const selectStatesOptions = document.querySelectorAll('#state option');
+    
+    console.log('URL: ', urlEditorial);
+    
+    const all_states = {
+		"PR": "parana",
+		"RS": "rio_grande_do_sul",
+		"SC": "santa_catarina"
+	};
+
+    // const all_editorials = {
+    //     "1": "Educação Infantil",
+    //     "2": "Ensino Fundamental e Médio",
+    //     "3": "Ex-Alunos",
+    //     "4": "Salesianos Cooperadores",
+    //     "5": "Polo EaD Faculdade Dom Bosco",
+    //     "6": "ADMA",
+    //     "7": "Apirantado",
+    //     "8": "Capelanias",
+    //     "9": "Obra Social",
+    //     "10": "Oratório",
+    //     "11": "Paróquia",
+    //     "12": "Igreja Semipública",
+    //     "13": "Centro Juvenil",
+    //     "14": "Assessoria às Obras",
+    //     "15": "Comissão Inspetorial de Pastoral (CIP)",
+    //     "16": "Coordenação Geral",
+    //     "17": "Cursos Técnicos",
+    //     "18": "Faculdade Dom Bosco",
+    //     "19": "Gráfica",
+    //     "20": "Casa de Repouso"
+    // }
+
+    if(urlEditorial) {
+        selectEditorial.value = urlEditorial;
+	}
+
+    selectStates.addEventListener('change', function() {
+		formState.submit();
+	}); 
+
+    selectEditorial.addEventListener('change', function() {
+		formState.submit();
+	});
+
+    if(urlState && urlState != '0') {
+		selectStates.value = urlState;
+
+		if(urlState != '0') {
+			document.getElementById(all_states[urlState]).classList.add('is-active');
+		}
+	}
+
+    if(urlState && urlState == '0') {
+		selectStates.value = urlState;
+    }
+
+    mapStates.forEach(state => {
+		state.addEventListener('click', function() {
+			mapStates.forEach(otherState => {
+				otherState.classList.remove('is-active');
+			});
+
+			this.classList.add('is-active');
+
+			for(let key in all_states) {
+				if(this.id == all_states[key]) {
+					selectStatesOptions.forEach(selectStatesOption => {
+						if(key.toLowerCase() == selectStatesOption.value) {
+							selectStates.value = selectStatesOption.value;
+							selectEditorial.value = "0";
+							formState.submit();
+						}
+					});
+				}
+			}
+		});
+	});
+
+    selectStatesOptions.forEach(option => {
+		for(const [key, value] of Object.entries(all_states)) {
+			if(option.value.toLowerCase() == key.toLowerCase()) {
+				existing_states.push(value);
+			}
+		}
+	});
+</script>
+
 </div><!-- #main -->
 </section><!-- #primary -->
 
 <?php
 
-get_footer();
+get_footer();                                                                                                                                                                       
