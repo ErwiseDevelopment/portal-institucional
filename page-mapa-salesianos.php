@@ -183,7 +183,7 @@ get_header(); ?>
                                         <div class="overflow-hidden shadow-sm rounded bg-light">
                                             <div class="u-bg-folk-blue py-3">
                                                 <h4 class="font-weight-bold text-center text-white">
-                                                    Ascurra
+                                                    
                                                 </h4>
                                             </div>
 
@@ -215,7 +215,7 @@ get_header(); ?>
                                                 </p> -->
 
                                                 <span class="d-block">
-                                                    <?php echo get_field('enderecos') ?>
+                                                    <?php echo get_field('descricao_breve') ?>
                                                 </span>
 
                                                 <a 

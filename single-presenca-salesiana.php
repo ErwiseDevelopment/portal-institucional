@@ -103,7 +103,7 @@ get_header(); ?>
             <div class="col-3">
 
                 <h4 class="font-weight-bold">
-                    Posts relacionados:
+                   Outras Presenças
                 </h4>
 
                 <div class="row mt-4">
