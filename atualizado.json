@@ -1,0 +1,220 @@
+[
+    {
+        "key": "group_6566060baee1b",
+        "title": "onde estamos",
+        "fields": [
+            {
+                "key": "field_6566060cdc5ee",
+                "label": "Informações",
+                "name": "",
+                "aria-label": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "left",
+                "endpoint": 0
+            },
+            {
+                "key": "field_65664107dc5ef",
+                "label": "Atividades",
+                "name": "atividades",
+                "aria-label": "",
+                "type": "checkbox",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "choices": {
+                    "Educação Infantil": "Educação Infantil",
+                    "Ensino Fundamental e Médio": "Ensino Fundamental e Médio",
+                    "Ex-Alunos": "Ex-Alunos",
+                    "Salesianos Cooperadores": "Salesianos Cooperadores",
+                    "Polo EaD Faculdade Dom Bosco": "Polo EaD Faculdade Dom Bosco",
+                    "ADMA": "ADMA",
+                    "Apirantado": "Apirantado",
+                    "Capelanias": "Capelanias",
+                    "• Obra Social": "• Obra Social",
+                    "Oratório": "Oratório",
+                    "Paróquia": "Paróquia",
+                    "Igreja Semipública": "Igreja Semipública",
+                    "Centro Juvenil": "Centro Juvenil",
+                    "Assessoria às Obras": "Assessoria às Obras",
+                    "Comissão Inspetorial de Pastoral (CIP)": "Comissão Inspetorial de Pastoral (CIP)",
+                    "Coordenação Geral": "Coordenação Geral",
+                    "Cursos Técnicos": "Cursos Técnicos",
+                    "Faculdade Dom Bosco": "Faculdade Dom Bosco",
+                    "Gráfica": "Gráfica",
+                    "Casa de Repouso": "Casa de Repouso"
+                },
+                "default_value": [],
+                "return_format": "value",
+                "allow_custom": 0,
+                "layout": "vertical",
+                "toggle": 0,
+                "save_custom": 0
+            },
+            {
+                "key": "field_65664474aff45",
+                "label": "Comunidade",
+                "name": "",
+                "aria-label": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "left",
+                "endpoint": 0
+            },
+            {
+                "key": "field_6566420edc5f0",
+                "label": "Comunidade Salesiana",
+                "name": "comunidade_salesiana",
+                "aria-label": "",
+                "type": "wysiwyg",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "tabs": "visual",
+                "toolbar": "basic",
+                "media_upload": 0,
+                "delay": 0
+            },
+            {
+                "key": "field_65819a7e5219c",
+                "label": "Descrição breve",
+                "name": "descricao_breve",
+                "aria-label": "",
+                "type": "wysiwyg",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "tabs": "visual",
+                "toolbar": "basic",
+                "media_upload": 0,
+                "delay": 0
+            },
+            {
+                "key": "field_65664243dc5f2",
+                "label": "Endereços",
+                "name": "enderecos",
+                "aria-label": "",
+                "type": "wysiwyg",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "tabs": "visual",
+                "toolbar": "basic",
+                "media_upload": 0,
+                "delay": 0
+            },
+            {
+                "key": "field_65664490aff46",
+                "label": "Contatos",
+                "name": "",
+                "aria-label": "",
+                "type": "tab",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "placement": "left",
+                "endpoint": 0
+            },
+            {
+                "key": "field_65664254dc5f3",
+                "label": "Telefones",
+                "name": "telefones",
+                "aria-label": "",
+                "type": "wysiwyg",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "tabs": "visual",
+                "toolbar": "basic",
+                "media_upload": 0,
+                "delay": 0
+            },
+            {
+                "key": "field_656642bfdc5f4",
+                "label": "Observações",
+                "name": "outros",
+                "aria-label": "",
+                "type": "wysiwyg",
+                "instructions": "",
+                "required": 0,
+                "conditional_logic": 0,
+                "wrapper": {
+                    "width": "",
+                    "class": "",
+                    "id": ""
+                },
+                "default_value": "",
+                "tabs": "visual",
+                "toolbar": "basic",
+                "media_upload": 0,
+                "delay": 0
+            }
+        ],
+        "location": [
+            [
+                {
+                    "param": "post_type",
+                    "operator": "==",
+                    "value": "presenca-salesiana"
+                }
+            ]
+        ],
+        "menu_order": 0,
+        "position": "normal",
+        "style": "default",
+        "label_placement": "top",
+        "instruction_placement": "label",
+        "hide_on_screen": "",
+        "active": true,
+        "description": "",
+        "show_in_rest": 0
+    }
+]
