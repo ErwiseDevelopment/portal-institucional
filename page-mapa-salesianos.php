@@ -173,14 +173,11 @@ get_header(); ?>
 
                             if($items->have_posts()) :
                                 while($items->have_posts()): $items->the_post();
-                                    // if($category_editorial):
-                                    //     foreach(get_field('atividades') as $activity) {
-                                            
-                                    //     }
-                        ?>
+                        ?>  
                                     <div class="col-12 mb-3 px-0">
 
                                         <div class="overflow-hidden shadow-sm rounded bg-light">
+                                            <a style= "text-decoration:none" href="<?php the_permalink() ?>">
                                             <div class="u-bg-folk-blue py-3">
                                                 <h4 class="font-weight-bold text-center text-white">
                                                     
@@ -188,42 +185,55 @@ get_header(); ?>
                                             </div>
 
                                             <div class="p-4">
-                                                <img
-                                                class=""
-                                                src=""
-                                                alt="" />
-
-                                                <h4 class="font-weight-bold mb-4">
+                                                                <?php
+                                                                        $categories = get_the_terms($other_posts->ID, 'estado');
+                                                                        $states_categories = [];
+                                                                        
+                                                                        if (!empty($categories)) {
+                                                                        foreach($categories as $category) {
+                                                                            if($category->parent != 0) {
+                                                                                array_push($states_categories, $category->name);
+                                                                            }
+                                                                        
+                                                                        }
+                                                                    }
+                                                                        if (!empty($categories)) {
+                                                                        foreach($categories as $category) {
+                                                                            if($category->parent == 0) {
+                                                                                array_push($states_categories, $category->name);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                ?>
+                                        
+                                                <h4 class="font-weight-bold ">
                                                     <!-- Colégio Salesianos São Paulo -->
-                                                    <?php the_title() ?>
+                                                    <?php the_title() ; ?>
                                                 </h4>
+                                                    <p class="font-weight mb-4">
+                                                        <?php 
+                                                        if (!empty($categories)){
+                                                            echo $states_categories[0] . ', ' . $states_categories[1];
+                                                            }
+                                                        else{
+                                                            echo 'Sem local definido' ;
+                                                        }
+                                                        ?>
+                                                    </p>
 
-                                                <hr />
+                                                    <hr />
 
-                                                <!-- <p>
-                                                    <strong>
-                                                        Endereço:
-                                                    </strong>   
-
-                                                    <br />
-
-                                                    <br />
-
-                                                    Rua Mamãe Margarida, 120 - Centro <br />
-                                                    Caixa Postal 34 <br />
-                                                    89138-000 - Ascurra, SC
-                                                </p> -->
-
-                                                <span class="d-block">
+                                                <span class="d-block mb-4">
                                                     <?php echo get_field('descricao_breve') ?>
                                                 </span>
 
-                                                <a 
-                                                class="u-line-height-100 hover:u-opacity-8 u-font-weight-bold text-center text-decoration-none u-color-folk-white u-bg-folk-theme py-2 px-5"
-                                                href="<?php the_permalink() ?>">
+                                                <span 
+                                                class="u-line-height-100 hover:u-opacity-8 u-font-weight-bold text-center text-decoration-none u-color-folk-white u-bg-folk-theme py-2 px-5 ">
                                                     Ver mais
-                                                </a>
+                                                </span >
+
                                             </div>
+                                            </a>
                                         </div>
                                     </div>
                         <?php
@@ -517,9 +527,9 @@ get_header(); ?>
     console.log('URL: ', urlEditorial);
     
     const all_states = {
-		"PR": "parana",
-		"RS": "rio_grande_do_sul",
-		"SC": "santa_catarina"
+		"pr": "parana",
+		"rs": "rio_grande_do_sul",
+		"sc": "santa_catarina"
 	};
 
     // const all_editorials = {
