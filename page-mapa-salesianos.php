@@ -30,7 +30,7 @@ get_header(); ?>
         scale: 1.8;
     }
 
-    @media screen and (min-width: 1600px) {
+    @media screen and (min-width: 1520px) {
         .box-map svg {
             margin-top: -500px;
             scale: 2.0;
