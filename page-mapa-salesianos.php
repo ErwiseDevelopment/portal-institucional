@@ -73,10 +73,45 @@ get_header(); ?>
                                 class="form-control"
                                 id="state"
                                 name="estado">
-                                    <option value="0">Escolha um estado</option>
+                                    <option value="0">Selecione um estado</option>
                                     <?php foreach($categories_states as $state): ?>
                                         <option value="<?php echo $state->slug; ?>"><?php echo $state->name; ?></option>
                                     <?php endforeach; ?>
+                                </select>
+                            </div>
+
+                            <div class="col-12 mb-4">
+
+                                <?php
+                                    if(isset($_GET['estado'])) {
+                                        $state = $_GET['estado'];
+
+                                        $category_state = get_term_by('slug', $state, 'estado');
+
+                                        if($category_state) {
+                                            $categories_cities = get_terms(array(
+                                                                        'taxonomy'   => 'estado',
+                                                                        'hide_empty' => false,
+                                                                        'parent'     => $category_state->term_id
+                                                                    ));
+                                        }
+                                    }
+                                ?>
+
+                                <select 
+                                class="form-control"
+                                id="city"
+                                name="cidade">
+                                    <option value="0">Selecione uma cidade</option>
+                                    <?php 
+                                        if($categories_cities):
+                                            foreach($categories_cities as $city): 
+                                    ?>
+                                        <option value="<?php echo $city->slug; ?>"><?php echo $city->name; ?></option>
+                                    <?php 
+                                            endforeach; 
+                                        endif;
+                                    ?>
                                 </select>
                             </div>
 
@@ -86,7 +121,7 @@ get_header(); ?>
                                 class="form-control"
                                 id="editorial"
                                 name="editoria">
-                                    <option value="0">Escolha uma editoria</option>
+                                    <option value="0">Selecione nossas obras</option>
                                     <?php
                                         $editorials = [
                                             1 => 'Educação Infantil',
@@ -129,6 +164,10 @@ get_header(); ?>
 
                             if(isset($_GET['estado']) && $_GET['estado'] != '0') {
                                 $category_state = $_GET['estado'];
+                            }
+
+                            if(isset($_GET['cidade']) && $_GET['cidade'] != '0') {
+                                $category_state = $_GET['cidade'];
                             }
 
                             if(isset($_GET['editoria']) && $_GET['editoria'] != '0') {
@@ -212,8 +251,14 @@ get_header(); ?>
                                                                     array_push($states_categories, $category->name);
                                                                 }
                                                             }
+
+                                                            echo '<h3 class="font-weight-bold">' . $states_categories[0] . '</h3>';
                                                         }
                                                     ?>
+
+                                                    <p class="font-weight-bold">
+                                                        <?php echo get_field('descricao_breve') ?>
+                                                    </p>
                                             
                                                     <h4 class="font-weight-bold">
                                                         <!-- Colégio Salesianos São Paulo -->
@@ -523,14 +568,14 @@ get_header(); ?>
 <script>
     let currentUrl = window.location.href;
 	let urlState = /estado=([^&]+)/.exec(currentUrl) != null ? /estado=([^&]+)/.exec(currentUrl)[1] : null;
+    let urlCity = /cidade=([^&]+)/.exec(currentUrl) != null ? /cidade=([^&]+)/.exec(currentUrl)[1] : null;
     let urlEditorial = /editoria=([^&]+)/.exec(currentUrl) != null ? /editoria=([^&]+)/.exec(currentUrl)[1] : null;
     const formState = document.getElementById('formState');
     const mapStates = document.querySelectorAll('.js-map-brazil path');
     const selectStates = document.getElementById('state');
+    const selectCities = document.getElementById('city');
     const selectEditorial = document.getElementById('editorial');
     const selectStatesOptions = document.querySelectorAll('#state option');
-    
-    console.log('URL: ', urlEditorial);
     
     const all_states = {
 		"pr": "parana",
@@ -538,28 +583,9 @@ get_header(); ?>
 		"sc": "santa_catarina"
 	};
 
-    // const all_editorials = {
-    //     "1": "Educação Infantil",
-    //     "2": "Ensino Fundamental e Médio",
-    //     "3": "Ex-Alunos",
-    //     "4": "Salesianos Cooperadores",
-    //     "5": "Polo EaD Faculdade Dom Bosco",
-    //     "6": "ADMA",
-    //     "7": "Apirantado",
-    //     "8": "Capelanias",
-    //     "9": "Obra Social",
-    //     "10": "Oratório",
-    //     "11": "Paróquia",
-    //     "12": "Igreja Semipública",
-    //     "13": "Centro Juvenil",
-    //     "14": "Assessoria às Obras",
-    //     "15": "Comissão Inspetorial de Pastoral (CIP)",
-    //     "16": "Coordenação Geral",
-    //     "17": "Cursos Técnicos",
-    //     "18": "Faculdade Dom Bosco",
-    //     "19": "Gráfica",
-    //     "20": "Casa de Repouso"
-    // }
+    if(urlCity) {
+		selectCities.value = urlCity;
+	}
 
     if(urlEditorial) {
         selectEditorial.value = urlEditorial;
@@ -568,6 +594,10 @@ get_header(); ?>
     selectStates.addEventListener('change', function() {
 		formState.submit();
 	}); 
+
+    selectCities.addEventListener('change', function() {
+		formState.submit();
+	});
 
     selectEditorial.addEventListener('change', function() {
 		formState.submit();
