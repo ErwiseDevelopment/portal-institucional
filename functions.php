@@ -289,6 +289,12 @@ function mantenedora_create_post_type() {
 			'hierarchical' => true, 
 			'show_admin_column' => true 
 	));
+    register_taxonomy('editorias', 'presenca-salesiana', 
+    array(
+        'labels' => array('name' => 'Editorias', 'singular_name' => 'Editorias'), 
+        'hierarchical' => true, 
+        'show_admin_column' => true 
+));
 
 }
 add_action( 'init', 'erwise_create_taxonomy' );

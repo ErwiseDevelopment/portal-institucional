@@ -234,7 +234,7 @@ get_header(); ?>
 
                                                 <div class="p-4">
                                                     <?php
-                                                        $categories = get_the_terms($other_posts->ID, 'estado');
+                                                        $categories = get_the_terms($post_id, 'estado');
                                                         $states_categories = [];
                                                             
                                                         if(!empty($categories)) {
