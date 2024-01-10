@@ -282,19 +282,20 @@ function mantenedora_create_post_type() {
    }
    add_action( 'init', 'mantenedora_create_post_type' );
    
-   function erwise_create_taxonomy() {
+function erwise_create_taxonomy() {
     register_taxonomy('estado', 'presenca-salesiana', 
 		array(
 			'labels' => array('name' => 'Estados/Cidade', 'singular_name' => 'Estados/Cidade'), 
 			'hierarchical' => true, 
 			'show_admin_column' => true 
-	));
+	    ));
+
     register_taxonomy('editorias', 'presenca-salesiana', 
-    array(
-        'labels' => array('name' => 'Editorias', 'singular_name' => 'Editorias'), 
-        'hierarchical' => true, 
-        'show_admin_column' => true 
-));
+        array(
+            'labels' => array('name' => 'Editorias', 'singular_name' => 'Editorias'), 
+            'hierarchical' => true, 
+            'show_admin_column' => true 
+        ));
 
 }
 add_action( 'init', 'erwise_create_taxonomy' );
