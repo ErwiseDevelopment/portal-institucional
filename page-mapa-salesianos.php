@@ -236,17 +236,21 @@ get_header(); ?>
                                                 </div>
 
                                                 <div class="p-4">
-                                                    <h4 class="font-weight-bold mb-0">
+                                                    <h2 class="font-weight-bold mb-0">
                                                         <?php
                                                             $state_current = get_term_by('id', $category_city->parent, 'estado');
 
-                                                            echo $category_city->name . ', ' . $state_current->name;
+                                                            echo $category_city->name 
                                                         ?>
-                                                    </h4>
+                                                    </h2>
 
-                                                    <h3 class="font-weight-bold">
+                                                    <!-- <h3 class="font-weight-bold">
                                                         Colégio Salesianos São Paulo
-                                                    </h3>
+                                                    </h3> -->
+
+                                                    <h4>
+                                                        <?php echo $category_city->description; ?>
+                                                    </h4>
 
                                                     <div class="mt-2">
                                                         <?php
@@ -261,10 +265,6 @@ get_header(); ?>
                                                     </div>
 
                                                     <hr />
-
-                                                    <p>
-                                                        <?php echo $category_city->description; ?>
-                                                    </p>
 
                                                     <span class="u-line-height-100 hover:u-opacity-8 u-font-weight-bold text-center text-decoration-none u-color-folk-white u-bg-folk-theme py-2 px-5 ">
                                                         Ver mais
