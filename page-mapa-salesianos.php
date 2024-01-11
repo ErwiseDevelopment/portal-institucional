@@ -122,6 +122,17 @@ get_header(); ?>
                                 id="editorial"
                                 name="editoria">
                                     <option value="0">Selecione nossas obras</option>
+                                    
+                                    <!--
+                                        $categories_editorials = get_terms(array(
+                                            'taxonomy'   => 'editorias',
+                                            'hide_empty' => false,
+                                            'parent'     => 0
+                                        ));
+
+                                        foreach($categories_editorials as $category_editorial):
+                                    -->
+
                                     <?php
                                         $editorials = [
                                             1 => 'Educação Infantil',
@@ -145,8 +156,9 @@ get_header(); ?>
                                             19 => 'Gráfica',
                                             20 => 'Casa de Repouso'
                                         ];
+
+                                        foreach($editorials as $key => $value):
                                     ?>
-                                    <?php foreach($editorials as $key => $value): ?>
                                         <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
                                     <?php endforeach; ?>
                                 </select>
@@ -160,10 +172,12 @@ get_header(); ?>
                         <!-- loop -->
                         <?php
                             $category_state = null;
+                            $category_state_current = null;
                             $relation = 'OR';
 
                             if(isset($_GET['estado']) && $_GET['estado'] != '0') {
                                 $category_state = $_GET['estado'];
+                                $category_state_current = get_term_by('slug', $_GET['estado'], 'estado');
                             }
 
                             if(isset($_GET['cidade']) && $_GET['cidade'] != '0') {
@@ -174,50 +188,42 @@ get_header(); ?>
                                 $category_editorial = $editorials[$_GET['editoria']];
                             }
 
-                            if(isset($_GET['estado']) && isset($_GET['editoria']) && $_GET['estado'] != "0" && $_GET['editoria']) {
+                            if(isset($_GET['estado']) && isset($_GET['cidade']) && isset($_GET['editoria']) && $_GET['estado'] != "0" && $_GET['cidade'] != "0" && $_GET['editoria'] != "0") {
                                 $args = array(
-                                    'posts_per_page' => -1,
-                                    'post_type'     => 'presenca-salesiana',
-                                    'order'         => 'DESC',
-                                    'meta_query'    => array(
-                                                            array(
-                                                                'key'   => 'atividades',
-                                                                'value' => $category_editorial,
-                                                                'compare' => 'LIKE'
+                                            'taxonomy'   => 'estado',
+                                            'hide_empty' => false,
+                                            'slug'       => $category_state,
+                                            'meta_query' => array(
+                                                                array(
+                                                                    'key'     => 'atividades',
+                                                                    'value'   => $editorials[$_GET['editoria']],
+                                                                    'compare' => 'LIKE'
+                                                                )
                                                             )
-                                                        ),
-                                    'tax_query'     => array(
-                                                        array(
-                                                            'taxonomy' => 'estado',
-                                                            'field'    => 'slug',
-                                                            'terms'    => array($category_state)
-                                                        )
-                                ));
+                                        );
+                            } elseif(isset($_GET['estado']) && isset($_GET['cidade']) && $_GET['estado'] != "0" && $_GET['cidade'] != "0") {
+                                $args = array(
+                                            'taxonomy'   => 'estado',
+                                            'hide_empty' => false,
+                                            'slug'       => $category_state
+                                        );
                             } elseif(isset($_GET['estado']) && $_GET['estado'] != "0") {
                                 $args = array(
-                                    'posts_per_page' => -1,
-                                    'post_type'     => 'presenca-salesiana',
-                                    'order'         => 'DESC',
-                                    'tax_query'     => array(
-                                                        'relation' => $relation,
-                                                        array(
-                                                            'taxonomy' => 'estado',
-                                                            'field'    => 'slug',
-                                                            'terms'    => array($category_state)
-                                                        )
-                                ));
-                            }  else {
+                                            'taxonomy'   => 'estado',
+                                            'hide_empty' => false,
+                                            'parent'     => $category_state_current->term_id
+                                        );
+                            } else {
                                 $args = array(
-                                    'posts_per_page' => -1,
-                                    'post_type'      => 'presenca-salesiana',
-                                    'order'          => 'DESC'
-                                );
+                                            'taxonomy'   => 'estado',
+                                            'hide_empty' => false
+                                        );
                             }
 
-                            $items = new WP_Query($args);
+                            $categories_cities = get_terms($args);
 
-                            if($items->have_posts()) :
-                                while($items->have_posts()): $items->the_post();
+                            foreach($categories_cities as $category_city):
+                                if($category_city->parent != 0):
                         ?>  
                                     <div class="col-12 mb-3 px-0">
 
@@ -225,61 +231,40 @@ get_header(); ?>
                                             
                                             <a 
                                             style="text-decoration:none" 
-                                            href="<?php the_permalink() ?>">
+                                            href="<?php echo get_home_url(null, 'cidades?cidade=' . $category_city->term_id); ?>">
                                                 <div class="u-bg-folk-blue py-3">
-                                                    <h4 class="font-weight-bold text-center text-white">
-                                                        
-                                                    </h4>
                                                 </div>
 
                                                 <div class="p-4">
-                                                    <?php
-                                                        $categories = get_the_terms($post_id, 'estado');
-                                                        $states_categories = [];
-                                                            
-                                                        if(!empty($categories)) {
-                                                            foreach($categories as $category) {
-                                                                if($category->parent != 0) {
-                                                                    array_push($states_categories, $category->name);
-                                                                }
-                                                            }
-                                                        }
-                                                        
-                                                        if(!empty($categories)) {
-                                                            foreach($categories as $category) {
-                                                                if($category->parent == 0) {
-                                                                    array_push($states_categories, $category->name);
-                                                                }
-                                                            }
+                                                    <h4 class="font-weight-bold mb-0">
+                                                        <?php
+                                                            $state_current = get_term_by('id', $category_city->parent, 'estado');
 
-                                                            echo '<h3 class="font-weight-bold">' . $states_categories[0] . '</h3>';
-                                                        }
-                                                    ?>
-
-                                                    <p class="font-weight-bold">
-                                                        <?php echo get_field('descricao_breve') ?>
-                                                    </p>
-                                            
-                                                    <h4 class="font-weight-bold">
-                                                        <!-- Colégio Salesianos São Paulo -->
-                                                        <?php the_title() ; ?>
+                                                            echo $category_city->name . ', ' . $state_current->name;
+                                                        ?>
                                                     </h4>
 
-                                                    <p class="font-weight-bold mb-4">
-                                                        <?php 
-                                                            if(!empty($categories)) {
-                                                                echo $states_categories[0] . ', ' . $states_categories[1];
-                                                            } else {
-                                                                echo 'Sem local definido';
-                                                            }
+                                                    <h3 class="font-weight-bold">
+                                                        Colégio Salesianos São Paulo
+                                                    </h3>
+
+                                                    <div class="mt-2">
+                                                        <?php
+                                                            $activities = get_field('atividades', $category_city);
+
+                                                            foreach($activities as $activity):
                                                         ?>
-                                                    </p>
+                                                                <p class="font-weight-bold u-color-folk-theme mb-0">
+                                                                    <?php echo $activity; ?>
+                                                                </p>
+                                                        <?php endforeach; ?>
+                                                    </div>
 
                                                     <hr />
 
-                                                    <span class="d-block mb-4">
-                                                        <?php echo get_field('descricao_breve') ?>
-                                                    </span>
+                                                    <p>
+                                                        <?php echo $category_city->description; ?>
+                                                    </p>
 
                                                     <span class="u-line-height-100 hover:u-opacity-8 u-font-weight-bold text-center text-decoration-none u-color-folk-white u-bg-folk-theme py-2 px-5 ">
                                                         Ver mais
@@ -289,10 +274,12 @@ get_header(); ?>
                                         </div>
                                     </div>
                         <?php
-                                endwhile;
-                            else:
-                                echo '<p class="font-weight-bold text-white">Nenhuma unidade encontrada!</p>';
-                            endif;
+                                endif;
+                            endforeach;
+                            // ;
+                            // else:
+                            //     echo '<p class="font-weight-bold text-white">Nenhuma unidade encontrada!</p>';
+                            // endif;
 
                             wp_reset_query();
                         ?>

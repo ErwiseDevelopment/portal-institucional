@@ -63,7 +63,7 @@ get_header(); ?>
             <div class="col-3 d-none d-lg-block">
                 <a 
                     class="u-line-height-100 hover:u-opacity-8 u-font-weight-bold text-center text-decoration-none u-color-folk-white u-bg-folk-theme py-2 px-5"
-                    href="<?php echo get_home_url() . '/editorias' ?>">
+                    href="<?php echo get_home_url() . '/mapa-salesianos' ?>">
                     Voltar ao mapa
                 </a>   
             </div>
@@ -142,7 +142,7 @@ get_header(); ?>
             <div class="col-12 d-flex d-lg-none justify-content-center mt-5">
                 <a 
                 class="u-line-height-100 hover:u-opacity-8 u-font-weight-bold text-center text-decoration-none u-color-folk-white u-bg-folk-theme py-2 px-5"
-                href="<?php echo get_home_url() . '/editorias' ?>">
+                href="<?php echo get_home_url() . '/mapa-salesianos' ?>">
                     Voltar ao mapa
                 </a>   
             </div>
