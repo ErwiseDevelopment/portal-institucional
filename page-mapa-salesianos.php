@@ -241,10 +241,6 @@ get_header(); ?>
                                                         ?>
                                                     </h2>
 
-                                                    <!-- <h3 class="font-weight-bold">
-                                                        Colégio Salesianos São Paulo
-                                                    </h3> -->
-
                                                     <h4>
                                                         <?php echo $category_city->description; ?>
                                                     </h4>
@@ -271,7 +267,7 @@ get_header(); ?>
 
                                                                 foreach($post_categories_editorials as $post_category_editorial) {
                                                                     array_push($categories_cities_editorials, $post_category_editorial->name);
-                                                                }   
+                                                                } 
                                                             }
 
                                                             $all_categories_editorials = array_unique($categories_cities_editorials);
@@ -281,6 +277,9 @@ get_header(); ?>
                                                                     echo '<p class="font-weight-bold u-color-folk-theme mb-0">' . $category_editorial . '</p>';
                                                                 }
                                                             }
+
+                                                            $categories_cities_editorials = [];
+                                                            $all_categories_editorials = [];
                                                         ?>
                                                     </div>
 
