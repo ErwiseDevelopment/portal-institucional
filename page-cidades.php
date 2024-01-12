@@ -93,7 +93,7 @@ get_header(); ?>
                     ?>
                                 <div class="col-lg-4 mb-3">
 
-                                    <div class="overflow-hidden shadow-sm rounded bg-light">
+                                    <div class="h-100 overflow-hidden shadow-sm rounded bg-light">
                                         
                                         <a 
                                         style="text-decoration:none" 
@@ -106,15 +106,23 @@ get_header(); ?>
                                                     <?php the_title(); ?>
                                                 </h4>
 
-                                                <p class="font-weight-bold mb-4">
-                                                    <?php
-                                                        $category_state = get_term_by('id', $category->parent, 'estado');
+                                                <?php if($category): ?>
+                                                    <p class="font-weight-bold mb-4">
+                                                        <?php
+                                                            $all_categories_editorials = [];
 
-                                                        $category_editorial = get_the_terms(get_the_ID(), 'editorias')[0];
+                                                            $category_state = get_term_by('id', $category->parent, 'estado');
 
-                                                        echo $category->name . ', ' . $category_state->name . ' - ' . $category_editorial->name;
-                                                    ?>
-                                                </p>
+                                                            $categories_editorials = get_the_terms(get_the_ID(), 'editorias');
+
+                                                            foreach($categories_editorials as $category_editorial) {
+                                                                array_push($all_categories_editorials, $category_editorial->name);
+                                                            }
+
+                                                            echo $category->name . ', ' . $category_state->name . ' - ' . implode(', ', $all_categories_editorials);
+                                                        ?>
+                                                    </p>
+                                                <?php endif; ?>
 
                                                 <hr />
 

@@ -32,8 +32,8 @@ get_header(); ?>
 
     @media screen and (min-width: 1520px) {
         .box-map svg {
-            margin-top: -500px;
-            scale: 2.0;
+            margin-top: -650px; /* -500px */
+            scale: 2.5; /* 2.0 */
         }
     }
     .box-map svg path:hover,
@@ -122,44 +122,38 @@ get_header(); ?>
                                 id="editorial"
                                 name="editoria">
                                     <option value="0">Selecione nossas obras</option>
-                                    
-                                    <!--
-                                        $categories_editorials = get_terms(array(
+                                    <?php
+                                        // $editorials = [
+                                        //     1 => 'Educação Infantil',
+                                        //     2 => 'Ensino Fundamental e Médio',
+                                        //     3 => 'Ex-Alunos',
+                                        //     4 => 'Salesianos Cooperadores',
+                                        //     5 => 'Polo EaD Faculdade Dom Bosco',
+                                        //     6 => 'ADMA',
+                                        //     7 => 'Apirantado',
+                                        //     8 => 'Capelanias',
+                                        //     9 => 'Obra Social',
+                                        //     10 => 'Oratório',
+                                        //     11 => 'Paróquia',
+                                        //     12 => 'Igreja Semipública',
+                                        //     13 => 'Centro Juvenil',
+                                        //     14 => 'Assessoria às Obras',
+                                        //     15 => 'Comissão Inspetorial de Pastoral (CIP)',
+                                        //     16 => 'Coordenação Geral',
+                                        //     17 => 'Cursos Técnicos',
+                                        //     18 => 'Faculdade Dom Bosco',
+                                        //     19 => 'Gráfica',
+                                        //     20 => 'Casa de Repouso'
+                                        // ];
+
+                                        $editorials = get_terms(array(
                                             'taxonomy'   => 'editorias',
-                                            'hide_empty' => false,
-                                            'parent'     => 0
+                                            'hide_empty' => false
                                         ));
 
-                                        foreach($categories_editorials as $category_editorial):
-                                    -->
-
-                                    <?php
-                                        $editorials = [
-                                            1 => 'Educação Infantil',
-                                            2 => 'Ensino Fundamental e Médio',
-                                            3 => 'Ex-Alunos',
-                                            4 => 'Salesianos Cooperadores',
-                                            5 => 'Polo EaD Faculdade Dom Bosco',
-                                            6 => 'ADMA',
-                                            7 => 'Apirantado',
-                                            8 => 'Capelanias',
-                                            9 => 'Obra Social',
-                                            10 => 'Oratório',
-                                            11 => 'Paróquia',
-                                            12 => 'Igreja Semipública',
-                                            13 => 'Centro Juvenil',
-                                            14 => 'Assessoria às Obras',
-                                            15 => 'Comissão Inspetorial de Pastoral (CIP)',
-                                            16 => 'Coordenação Geral',
-                                            17 => 'Cursos Técnicos',
-                                            18 => 'Faculdade Dom Bosco',
-                                            19 => 'Gráfica',
-                                            20 => 'Casa de Repouso'
-                                        ];
-
-                                        foreach($editorials as $key => $value):
+                                        foreach($editorials as $editorial):
                                     ?>
-                                        <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                        <option value="<?php echo $editorial->term_id; ?>"><?php echo $editorial->name; ?></option>
                                     <?php endforeach; ?>
                                 </select>
                             </div>
@@ -174,6 +168,8 @@ get_header(); ?>
                             $category_state = null;
                             $category_state_current = null;
                             $relation = 'OR';
+                            $categories_cities_editorials = [];
+                            $all_categories_editorials = [];
 
                             if(isset($_GET['estado']) && $_GET['estado'] != '0') {
                                 $category_state = $_GET['estado'];
@@ -185,7 +181,8 @@ get_header(); ?>
                             }
 
                             if(isset($_GET['editoria']) && $_GET['editoria'] != '0') {
-                                $category_editorial = $editorials[$_GET['editoria']];
+                                // $category_editorial = $editorials[$_GET['editoria']];
+                                $category_editorial = get_term_by('id', $_GET['editoria'], 'editorias');
                             }
 
                             if(isset($_GET['estado']) && isset($_GET['cidade']) && isset($_GET['editoria']) && $_GET['estado'] != "0" && $_GET['cidade'] != "0" && $_GET['editoria'] != "0") {
@@ -196,7 +193,7 @@ get_header(); ?>
                                             'meta_query' => array(
                                                                 array(
                                                                     'key'     => 'atividades',
-                                                                    'value'   => $editorials[$_GET['editoria']],
+                                                                    'value'   => $category_editorial->name,
                                                                     'compare' => 'LIKE'
                                                                 )
                                                             )
@@ -254,14 +251,37 @@ get_header(); ?>
 
                                                     <div class="mt-2">
                                                         <?php
-                                                            $activities = get_field('atividades', $category_city);
+                                                            $args = array(
+                                                                'post_type'      => 'presenca-salesiana',
+                                                                'posts_per_page' => -1,
+                                                                'tax_query'      => array(
+                                                                                        array(
+                                                                                            'taxonomy' => 'estado',
+                                                                                            'field'    => 'slug',
+                                                                                            'terms'    => array($category_city->slug)
+                                                                                        )
+                                                            ));
 
-                                                            foreach($activities as $activity):
+                                                            $posts_editorials = new WP_Query($args);
+
+                                                            while($posts_editorials->have_posts()) {
+                                                                $posts_editorials->the_post();
+                                                                
+                                                                $post_categories_editorials = get_the_terms(get_the_ID(), 'editorias');
+
+                                                                foreach($post_categories_editorials as $post_category_editorial) {
+                                                                    array_push($categories_cities_editorials, $post_category_editorial->name);
+                                                                }   
+                                                            }
+
+                                                            $all_categories_editorials = array_unique($categories_cities_editorials);
+
+                                                            if($all_categories_editorials) {
+                                                                foreach($all_categories_editorials as $category_editorial) {
+                                                                    echo '<p class="font-weight-bold u-color-folk-theme mb-0">' . $category_editorial . '</p>';
+                                                                }
+                                                            }
                                                         ?>
-                                                                <p class="font-weight-bold u-color-folk-theme mb-0">
-                                                                    <?php echo $activity; ?>
-                                                                </p>
-                                                        <?php endforeach; ?>
                                                     </div>
 
                                                     <hr />
